@@ -5,7 +5,7 @@ class Gem::Specification
     ary = (__licenses || []).keep_if { |l| l.length > 0 }
     ary.length == 0 ? guess_licenses : ary
   end
-  
+
   def guess_licenses
     licenses = []
     Dir.foreach(full_gem_path) do |filename|
@@ -27,35 +27,48 @@ class Gem::Specification
   end
 
   private
-  
+
   def guess_licenses_from_file_contents(path)
+    puts "#{name} - #{path}"
     licenses = []
-    file_handle = File.new(path, "r")
     begin
-      while (line = file_handle.gets) && (licenses.size == 0)
-        line = line.strip
+      File.open(path) do |f|
+        data = f.read
+
+        # Replace all newlines with spaces.
+        data = data.gsub(/\n/, ' ')
+
+        # Make all places with more than one space into one space.
+        data = data.gsub(/  +/, ' ')
+
         # positive matches
-        [ 
+        matches = [
           /released under the (?<l>[\s\w]*) license/i,
           /same license as (?<l>[\s\w]*)/i,
-          /^(?<l>[\s\w]*) License, see/i,
-          /^(?<l>[\w]*) license$/i,
+          /(?<l>[\s\w]*) License, see/i,
           /\(the (?<l>[\s\w]*) license\)/i,
-          /^license: (?<l>[\s\w]*)/i,
-          /^released under the (?<l>[\s\w]*) license/i,
-        ].each do |r|
-          res = Regexp.new(r).match(line)
-          next unless res
-          licenses << res['l']
-          break
+          /license: (?<l>[\s\w]*)/i,
+          /released under the (?<l>[\s\w]*) license/i,
+          /(?<l>[\w]*) license/i,
+        ]
+
+        matches.each do |r|
+          match = data.scan(r).flatten.first
+          licenses << match if match
+        end
+
+        license_options = {
+          'MIT' => /Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files \(the "Software"\), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and\/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:/,
+          "Ruby" => /Ruby.s licence/
+        }
+
+        license_options.each do |license, text|
+          licenses << license if Regexp.new(text, 'i').match(data)
         end
       end
-    rescue
-      # TODO: warning
     end
-    file_handle.close
     licenses
   end
-  
+
 end
 
