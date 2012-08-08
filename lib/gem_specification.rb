@@ -15,14 +15,14 @@ class Gem::Specification
         if (parts.length >= 2)
           licenses << parts[0].upcase
         else
-          licenses = guess_licenses_from_file_contents File.join(full_gem_path, filename)
+          licenses = licenses + guess_licenses_from_file_contents File.join(full_gem_path, filename)
         end
       elsif filename_without_extension.include?("readme")
-        licenses = guess_licenses_from_file_contents File.join(full_gem_path, filename)
+        licenses = licenses + guess_licenses_from_file_contents File.join(full_gem_path, filename)
       end
-      break if licenses.length > 0
     end
     licenses << :unknown if licenses.length == 0
+    puts "#{name} - #{licenses}"
     licenses
   end
 
