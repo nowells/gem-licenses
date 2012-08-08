@@ -36,6 +36,7 @@ class Gem::Specification
 
         # positive matches
         matches = [
+          /under the same license as (?<l>[\s\w]+)/i,
           /released under the (?<l>[\s\w]+) license/i,
           /same license as (?<l>[\s\w]+)/i,
           /(?<l>[\s\w]+) License, see/i,
