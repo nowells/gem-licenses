@@ -34,12 +34,6 @@ class Gem::Specification
       File.open(path) do |f|
         data = f.read
 
-        # Replace all newlines with spaces.
-        data = data.gsub(/\n/, ' ')
-
-        # Make all places with more than one space into one space.
-        data = data.gsub(/  +/, ' ')
-
         # positive matches
         matches = [
           /released under the (?<l>[\s\w]+) license/i,
@@ -56,6 +50,11 @@ class Gem::Specification
           match.strip if match
           licenses << match if match and match.size > 0
         end
+
+        # Replace all newlines with spaces.
+        data = data.gsub(/\n/, ' ')
+        # Make all places with more than one space into one space.
+        data = data.gsub(/  +/, ' ')
 
         license_options = {
           'MIT' => /Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files \(the "Software"\), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and\/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:/,
