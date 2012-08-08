@@ -47,7 +47,7 @@ class Gem::Specification
 
         matches.each do |r|
           match = data.scan(r).flatten.first
-          match = match.strip if match
+          match = match.strip.gsub(/\n/, ' ').gsub(/  +/, ' ') if match
           licenses << match if match and match.size > 0
         end
 
