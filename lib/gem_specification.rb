@@ -36,13 +36,12 @@ class Gem::Specification
 
         # positive matches
         matches = [
-          /under the same license as (?<l>[\s\w]+)/i,
-          /released under the (?<l>[\s\w]+) license/i,
-          /same license as (?<l>[\s\w]+)/i,
           /(?<l>[\s\w]+) License, see/i,
           /the (?<l>[\s\w]+) license/i,
           /license: (?<l>[\s\w]+)/i,
+          /same license as (?<l>[\s\w]+)/i,
           /released under the (?<l>[\s\w]+) license/i,
+          /under the same license as (?<l>[\s\w]+)/i,
         ]
 
         matches.each do |r|
@@ -58,7 +57,7 @@ class Gem::Specification
 
         license_options = {
           'MIT' => /Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files \(the "Software"\), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and\/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:/,
-          "Ruby" => /Ruby.s licence/
+          "Ruby" => /Ruby(.s)? licence/
         }
 
         license_options.each do |license, text|
@@ -68,7 +67,7 @@ class Gem::Specification
     rescue Exception => e
       puts "Exception processing #{name} - #{path}: #{e}"
     end
-    licenses
+    licenses.reverse
   end
 
 end
