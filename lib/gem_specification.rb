@@ -29,7 +29,6 @@ class Gem::Specification
   private
 
   def guess_licenses_from_file_contents(path)
-    puts "#{name} - #{path}"
     licenses = []
     begin
       File.open(path) do |f|
@@ -66,6 +65,8 @@ class Gem::Specification
           licenses << license if Regexp.new(text, 'i').match(data)
         end
       end
+    rescue Exception => e
+      puts "Exception processing #{name} - #{path}: #{e}"
     end
     licenses
   end
