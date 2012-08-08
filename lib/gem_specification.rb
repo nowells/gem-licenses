@@ -43,7 +43,6 @@ class Gem::Specification
           /the (?<l>[\s\w]+) license/i,
           /license: (?<l>[\s\w]+)/i,
           /released under the (?<l>[\s\w]+) license/i,
-          /(?<l>[\w]+) license/i,
         ]
 
         matches.each do |r|
