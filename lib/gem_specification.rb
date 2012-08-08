@@ -42,18 +42,19 @@ class Gem::Specification
 
         # positive matches
         matches = [
-          /released under the (?<l>[\s\w]*) license/i,
-          /same license as (?<l>[\s\w]*)/i,
-          /(?<l>[\s\w]*) License, see/i,
-          /\(the (?<l>[\s\w]*) license\)/i,
-          /license: (?<l>[\s\w]*)/i,
-          /released under the (?<l>[\s\w]*) license/i,
-          /(?<l>[\w]*) license/i,
+          /released under the (?<l>[\s\w]+) license/i,
+          /same license as (?<l>[\s\w]+)/i,
+          /(?<l>[\s\w]+) License, see/i,
+          /the (?<l>[\s\w]+) license/i,
+          /license: (?<l>[\s\w]+)/i,
+          /released under the (?<l>[\s\w]+) license/i,
+          /(?<l>[\w]+) license/i,
         ]
 
         matches.each do |r|
           match = data.scan(r).flatten.first
-          licenses << match if match
+          match.strip if match
+          licenses << match if match and match.size > 0
         end
 
         license_options = {
